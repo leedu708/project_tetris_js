@@ -1,0 +1,26 @@
+header {
+  text-align: center;
+}
+
+.cell {
+  background-color: #CCC;
+  height: 28px;
+  width: 28px;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.falling-cell {
+  background-color: green;
+}
+
+.set {
+  background-color: red;
+}
+
+.board-container {
+  width: 288px;
+  margin: 0 auto;
+}
