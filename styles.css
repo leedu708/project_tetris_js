@@ -2,19 +2,14 @@
   width: 100%;
 }
 
-.start-button, .score {
-  display: table;
-  margin: 10px auto;
-}
-
 header {
   text-align: center;
 }
 
 .cell {
   background-color: #CCC;
-  height: 28px;
-  width: 28px;
+  height: 32px;
+  width: 32px;
   padding: 0;
   margin: 0;
   vertical-align: top;
@@ -29,7 +24,16 @@ header {
   background-color: red;
 }
 
-.board-container {
-  width: 288px;
+.board-container, .information-container {
+  width: 100%;
+  margin: 10px auto;
+}
+
+table, .information, .start-button, .score {
+  display: table;
   margin: 0 auto;
+}
+
+.information, .scoreboard {
+  line-height: 20px;
 }

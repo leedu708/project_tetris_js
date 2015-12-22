@@ -8,7 +8,7 @@ TETRIS.block = (function() {
 
   function build(blockName, headCell, orientation) {
     row = headCell.row;
-    col = headCell.column - 1;
+    col = headCell.column;
     switch(blockName) {
       case "I":
         return buildI(row, col, orientation);

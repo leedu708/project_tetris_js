@@ -7,8 +7,8 @@ TETRIS.controller = (function() {
   var interval;
 
   function init() {
-    TETRIS.board.init(rows, columns);
     TETRIS.view.init(rows, columns);
+    TETRIS.board.init(rows, columns);    
   };
 
   function start() {
@@ -52,15 +52,15 @@ TETRIS.controller = (function() {
   };
 
   function restart() {
-    console.log('TETRIS.controller.init');
-    $('.play-button').off('click');
-    init();
+    $('.start-button').off('click');
+    TETRIS.controller.init();
   }
 
   return {
     init: init,
     keydown: keydown,
     start: start,
+    restart: restart,
     tic: tic
   };
   

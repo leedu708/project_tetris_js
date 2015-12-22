@@ -7,6 +7,8 @@ TETRIS.view = (function() {
 
   function init(rows, columns) {
     // create invisible rows
+    $('.gameover').remove();
+    $('table').remove();
     _rows = rows + 3;
     _columns = columns - 1;
     _renderBoard(_rows, _columns);
@@ -77,9 +79,9 @@ TETRIS.view = (function() {
 
   function renderGameOver() {
     disableControls();
-    $('.scoreboard').append("<center><h2>Game Over!</h2></center>");
+    $('.scoreboard').append("<div class='gameover'><center><h2>Game Over!</h2></center></div>");
     $('button').attr('disabled', false).text('Play Again?');
-    $('.start-button').on('click', TETRIS.controller.start);
+    $('.start-button').on('click', TETRIS.controller.restart);
   }
 
   return {
