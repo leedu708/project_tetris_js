@@ -9,8 +9,13 @@ TETRIS.controller = (function() {
   function init() {
     TETRIS.board.init(rows, columns);
     TETRIS.view.init(rows, columns);
-    interval = setInterval(tic, 200);
   };
+
+  function start() {
+    $('button').attr('disabled', true).off('click');
+    TETRIS.view.enableControls();
+    resetInterval();
+  }
 
   function tic(blockName, headCell, orientation) {
     TETRIS.board.tic();
@@ -46,9 +51,16 @@ TETRIS.controller = (function() {
     };
   };
 
+  function restart() {
+    console.log('TETRIS.controller.init');
+    $('.play-button').off('click');
+    init();
+  }
+
   return {
     init: init,
     keydown: keydown,
+    start: start,
     tic: tic
   };
   

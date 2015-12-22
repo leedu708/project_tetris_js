@@ -10,13 +10,16 @@ TETRIS.view = (function() {
     _rows = rows + 3;
     _columns = columns - 1;
     _renderBoard(_rows, _columns);
-    enableControls();
+    $('td').removeClass('falling-cell set');
+    $('.start-button').text('Click to Start').on('click', TETRIS.controller.start);
   };
 
   function tic(currentBlockCoords, setCells) {
+    clearSetCells();
     clearFallingBlocks();
     $.each(currentBlockCoords, renderFallingBlock);
     $.each(setCells, renderSetCells);
+    renderScore();
   };
 
   function _renderBoard(rows, columns) {
@@ -51,9 +54,18 @@ TETRIS.view = (function() {
     $(cellClassCoords).addClass('set');
   };
 
+  function renderScore() {
+    score = TETRIS.board.getScore();
+    $('.score').text("Current Score: " + score);
+  };
+
   function clearFallingBlocks() {
     $('td').removeClass('falling-cell');
   };
+
+  function clearSetCells() {
+    $('td').removeClass('set');
+  }
 
   function enableControls() {
     $(window).on('keydown', TETRIS.controller.keydown);
@@ -66,12 +78,15 @@ TETRIS.view = (function() {
   function renderGameOver() {
     disableControls();
     $('.scoreboard').append("<center><h2>Game Over!</h2></center>");
+    $('button').attr('disabled', false).text('Play Again?');
+    $('.start-button').on('click', TETRIS.controller.start);
   }
 
   return {
     init: init,
     tic: tic,
-    clearFallingBlocks: clearFallingBlocks,
+    clearSetCells: clearSetCells,
+    enableControls: enableControls,
     renderGameOver: renderGameOver,
     renderFallingBlock: renderFallingBlock
   };

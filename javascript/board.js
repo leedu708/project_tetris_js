@@ -2,38 +2,40 @@ var TETRIS = TETRIS || {}
 
 TETRIS.board = (function() {
 
-  var _rows,
-      _columns,
-      _blockNames
-  
+  var _rows;
+  var _columns;
+  var _blockNames;
+  var score = 0;  
   var cells = [];
-
   var currentBlock;
 
   function init(rows, columns) {
     // create invisible rows
+    cells = [];
+    currentBlock = null;
     _rows = rows + 3;
     _columns = columns - 1;
     _blockNames = ["I", "O", "T", "S", "Z", "J", "L"];
     _buildBoard(_rows, _columns);
-    currentBlock = null;
   };
 
   function tic() {
     _checkCollision();
+    _checkAllRows();
     if (currentBlock) {      
       currentBlock.headCell = cells[currentBlock.headCell.id + 10];
     }
 
     else {
-      currentBlock = new block();
+      currentBlock = new Block();
     };
   };
 
   function _buildBoard(rows, columns) {
     for (var i = 0; i <= rows; i++) {
+      var newRow = [];
       for (var j = 0; j <= columns; j++) {
-        var newCell = new cell(i, j);
+        var newCell = new Cell(i, j);
         cells.push(newCell);
       };
     };
@@ -41,13 +43,13 @@ TETRIS.board = (function() {
     return cells;
   };
 
-  function block() {
+  function Block() {
     this.name = _blockNames[_randNum(0, _blockNames.length - 1)];
     this.headCell = cells[_randNum(34, 37)]
     this.orientation = _randNum(1, 4);
   }
 
-  function cell(row, column) {
+  function Cell(row, column) {
     this.id = row * 10 + column;
     this.row = row;
     this.column = column;
@@ -61,11 +63,6 @@ TETRIS.board = (function() {
       var i = 0;
       while (currentBlock && i < 4) {
         _collidesWithBottom(coords[i]);
-
-        if (currentBlock) {
-          _collidesWithSetBlock(coords[i]);
-        };
-
         i++;
       }; 
     };
@@ -73,16 +70,38 @@ TETRIS.board = (function() {
   };
 
   function _collidesWithBottom(coord) {
-    if (coord[0] === 23) {
+    oneCellDown = getCell(coord[0] + 1, coord[1]);
+    if (coord[0] === 23 || oneCellDown.set) {
       _setCurrentBlock();
     }
   };
 
-  function _collidesWithSetBlock(coord) {
-    oneCellDown = getCell(coord[0] + 1, coord[1]);
-    if (oneCellDown.set) {
-      _setCurrentBlock();
-    }
+  function _collisionLeft() {
+    coords = getCurrentBlockCoords();
+    for (var i = 0; i < 4; i++) {
+      checkCell = getCell(coords[i][0], coords[i][1]);
+      if (checkCell.column === 0) {
+        return true;
+      }
+
+      else if (getCell(checkCell.row, checkCell.column - 1).set) {
+        return true;
+      };
+    };
+  };
+
+  function _collisionRight() {
+    coords = getCurrentBlockCoords();
+    for (var i = 0; i < 4; i++) {
+      checkCell = getCell(coords[i][0], coords[i][1]);
+      if (checkCell.column === 9) {
+        return true;
+      }
+
+      else if (getCell(checkCell.row, checkCell.column + 1).set) {
+        return true;
+      };
+    };
   };
 
   function collidesWithTop(){
@@ -91,6 +110,29 @@ TETRIS.board = (function() {
       if (cells[index].set) {
         return true;
       };
+    };
+  };
+
+  function _checkAllRows() {
+    for (i = 4; i < 24; i++) {
+      if(_checkFullRow(i)) {
+        _toggleSetRow(i);
+        _shiftRowsDown(i);
+      };
+    };
+  };
+
+  function _checkFullRow(rowID) {
+    var rowSetCells = [];
+    for (var i = 0; i < 10; i++) {
+      index = rowID * 10 + i;
+      if (cells[index].set) {
+        rowSetCells.push(cells[index]);
+      };
+    };
+
+    if (rowSetCells.length === 10) {
+      return true;
     };
   };
 
@@ -105,28 +147,57 @@ TETRIS.board = (function() {
     cell.set = true;
   };
 
-  function rotateBlock() {
-    if (currentBlock.orientation === 4) {
-      currentBlock.orientation = 1;
+  function _toggleSetRow(rowID) {
+    for (var i = 0; i < 10; i++) {
+      index = rowID * 10 + i;
+      cells[index].set = false;
     }
 
-    else {
-      currentBlock.orientation += 1;
+    score += 10;
+  };
+
+  function _shiftRowsDown(rowID) {
+    setCells = getSetCells();
+    for (var i = 0; i < setCells.length; i++) {
+      if (setCells[i].id < rowID * 10) {
+        setCells[i].set = false;
+        cells[setCells[i].id + 10].set = true;
+      };
+    };
+  };
+
+  function rotateBlock() {
+    if (!_collisionLeft() && !_collisionRight()) {
+      if (currentBlock.orientation === 4) {
+        currentBlock.orientation = 1;
+      }
+
+      else {
+        currentBlock.orientation += 1;
+      };
     };
   };
 
   function slideBlockLeft() {
-    currentBlock.headCell = cells[currentBlock.headCell.id - 1];
+    if (!_collisionLeft()) {
+      currentBlock.headCell = cells[currentBlock.headCell.id - 1];
+    };
   };
 
   function slideBlockRight() {
-    currentBlock.headCell = cells[currentBlock.headCell.id + 1];
+    if (!_collisionRight()) {
+      currentBlock.headCell = cells[currentBlock.headCell.id + 1];
+    };
   };
 
   function getCell(row, column) {
     var index = row * 10 + column;
     return cells[index];
   };
+
+  function getScore() {
+    return score;
+  }
 
   function getCurrentBlock() {
     return currentBlock;
@@ -154,16 +225,15 @@ TETRIS.board = (function() {
   return {
     init: init,
     tic: tic,
-    cells: cells,
     collidesWithTop: collidesWithTop,
     getCell: getCell,
     getCurrentBlock: getCurrentBlock,
     getCurrentBlockCoords: getCurrentBlockCoords,
+    getScore: getScore,
     getSetCells: getSetCells,
     slideBlockLeft: slideBlockLeft,
     slideBlockRight: slideBlockRight,
-    rotateBlock: rotateBlock,
-    block: block
+    rotateBlock: rotateBlock
   };
 
 })();

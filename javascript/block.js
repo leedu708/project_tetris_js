@@ -93,7 +93,7 @@ TETRIS.block = (function() {
   // head is cell furthest to the left
   function buildZ(row, col, orientation) {
     if (orientation === 1 || orientation === 3) {
-      blockCoords = [[row, col], [row, col + 1], [row - 1, col + 1], [row - 1, col + 2]];
+      blockCoords = [[row, col], [row, col + 1], [row + 1, col + 1], [row + 1, col + 2]];
     }
 
     else {
