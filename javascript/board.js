@@ -12,6 +12,7 @@ TETRIS.board = (function() {
   function init(rows, columns) {
     // create invisible rows
     cells = [];
+    score = 0;
     currentBlock = null;
     _rows = rows + 3;
     _columns = columns - 1;
