@@ -6,11 +6,11 @@ By Dustin Lee
 
 [Play Here](https://htmlpreview.github.io/?https://github.com/leedu708/project_tetris_js/blob/master/tetris.html)
 
-##Overview
+## Overview
 
 There are four JavaScript modules namespaced under TETRIS that make up the game.  The board module contains the board object which is comprised of cells and their information.  The view module displays the board in a coordinate system.  The block module creates blocks by returning the appropriate coordinates to the view to render.  The controller dictates the game loop on each "tick."
 
-  ###Board
+### Board
 
     Variables:
 
@@ -63,7 +63,7 @@ There are four JavaScript modules namespaced under TETRIS that make up the game.
         - getSetCells(): returns an array of all cells that are set
         - _randNum(): returns a random number within a range
 
-  ###View
+### View
 
     Variables:
 
@@ -86,7 +86,7 @@ There are four JavaScript modules namespaced under TETRIS that make up the game.
       - disableControls(): removes keydown listener
       - renderGameOver(): disables controls and renders game over screen
 
-  ###Block
+### Block
 
   - Uses a build function to return the coordinates of a given block. It requires
     - blockName: to determine block type
@@ -94,7 +94,7 @@ There are four JavaScript modules namespaced under TETRIS that make up the game.
     - orientation: to determine the orientation of the block
   - For rotation, the blocks pivot around the headCell. For flexibility, the headCell can be manipulated so that all blocks rotate around the same square in a 4x2 plane.
 
-  ###Controller
+### Controller
 
     Variables:
 
