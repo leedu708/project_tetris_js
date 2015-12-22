@@ -17,11 +17,11 @@ TETRIS.view = (function() {
   };
 
   function tic(currentBlockCoords, setCells) {
-    clearSetCells();
-    clearFallingBlocks();
-    $.each(currentBlockCoords, renderFallingBlock);
-    $.each(setCells, renderSetCells);
-    renderScore();
+    _clearSetCells();
+    _clearFallingBlocks();
+    $.each(currentBlockCoords, _renderFallingBlock);
+    $.each(setCells, _renderSetCells);
+    _renderScore();
   };
 
   function _renderBoard(rows, columns) {
@@ -46,26 +46,26 @@ TETRIS.view = (function() {
 
   };
 
-  function renderFallingBlock(index, coords) {
+  function _renderFallingBlock(index, coords) {
     cellClassCoords = '.' + coords[0] + '-' + coords[1];
     $(cellClassCoords).addClass('falling-cell');
   };
 
-  function renderSetCells(index, cell) {
+  function _renderSetCells(index, cell) {
     cellClassCoords = '.' + cell.row + '-' + cell.column;
     $(cellClassCoords).addClass('set');
   };
 
-  function renderScore() {
+  function _renderScore() {
     score = TETRIS.board.getScore();
     $('.score').text("Current Score: " + score);
   };
 
-  function clearFallingBlocks() {
+  function _clearFallingBlocks() {
     $('td').removeClass('falling-cell');
   };
 
-  function clearSetCells() {
+  function _clearSetCells() {
     $('td').removeClass('set');
   }
 
@@ -87,10 +87,8 @@ TETRIS.view = (function() {
   return {
     init: init,
     tic: tic,
-    clearSetCells: clearSetCells,
     enableControls: enableControls,
-    renderGameOver: renderGameOver,
-    renderFallingBlock: renderFallingBlock
+    renderGameOver: renderGameOver
   };
   
 })();

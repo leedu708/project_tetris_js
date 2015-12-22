@@ -5,6 +5,7 @@ TETRIS.controller = (function() {
   var rows = 20;
   var columns = 10;
   var interval;
+  var speed = 200;
 
   function init() {
     TETRIS.view.init(rows, columns);
@@ -14,7 +15,7 @@ TETRIS.controller = (function() {
   function start() {
     $('button').attr('disabled', true).off('click');
     TETRIS.view.enableControls();
-    resetInterval();
+    _resetInterval();
   }
 
   function tic(blockName, headCell, orientation) {
@@ -22,7 +23,7 @@ TETRIS.controller = (function() {
     currentBlockCoords = TETRIS.board.getCurrentBlockCoords();
     setCells = TETRIS.board.getSetCells();
     TETRIS.view.tic(currentBlockCoords, setCells);
-    checkGameOver();
+    _checkGameOver();
   };
 
   function keydown() {
@@ -40,11 +41,11 @@ TETRIS.controller = (function() {
     };
   };
 
-  function resetInterval() {
-    interval = setInterval(tic, 200);
+  function _resetInterval() {
+    interval = setInterval(tic, speed);
   };
 
-  function checkGameOver() {
+  function _checkGameOver() {
     if (TETRIS.board.collidesWithTop()) {
       clearInterval(interval);
       TETRIS.view.renderGameOver();

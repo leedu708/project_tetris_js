@@ -45,7 +45,7 @@ TETRIS.board = (function() {
 
   function Block() {
     this.name = _blockNames[_randNum(0, _blockNames.length - 1)];
-    this.headCell = cells[_randNum(31, 35)]
+    this.headCell = cells[_randNum(22, 25)]
     this.orientation = _randNum(1, 4);
   }
 
